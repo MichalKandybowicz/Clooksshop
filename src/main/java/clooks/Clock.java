@@ -1,76 +1,80 @@
 package clooks;
 
-public abstract class Clook {
+public abstract class Clock {
 
     private final int DURATION_DAY = 24;
     private final int DURATION_HOUR = 60;
     private final int DURATION_MINUTE = 60;
-    private final int DURATION_SECOND = 60;
 
-    private String sound ;
-    int sec;
-    int min;
-    int h;
+
+    protected String sound;
+    float sec;
     int timeSpeed;
 
-    public Clook(int sec, int min, int h, int timeSpeed) {
-        if (h <= 0 || h > DURATION_DAY){
-            throw new IllegalArgumentException("Hour must be >= 0, and be < 60 now is: " + h);
-        }
-        if (min <= 0 || min > DURATION_HOUR){
-            throw new IllegalArgumentException("Min must be >= 0, and be < 60 now is: " + min);
-        }
-        if (sec <= 0 || sec > DURATION_MINUTE){
-            throw new IllegalArgumentException("Sec must be >= 0 and be < 60, now is: " + sec);
-
-        }
+    Clock( int sec, int min, int h, int timeSpeed) {
+        setTime(h, min, sec);
         this.timeSpeed = timeSpeed;
-        this.h = h;
-        this.min = min;
-        this.sec = sec;
     }
 
-    private void saySound(){
-        System.out.println(sound);
-    }
+
 
     private void setTime(int h, int min, int sec){
 
-        if (h <= 0 || h > DURATION_DAY){
+        if (h < 0 || h > DURATION_DAY){
             throw new IllegalArgumentException("Hour must be >= 0, and be < 60 now is: " + h);
         }
-        if (min <= 0 || min > DURATION_HOUR){
+        if (min < 0 || min > DURATION_HOUR){
             throw new IllegalArgumentException("Min must be >= 0, and be < 60 now is: " + min);
         }
-        if (sec <= 0 || sec > DURATION_MINUTE){
+        if (sec < 0 || sec > DURATION_MINUTE){
             throw new IllegalArgumentException("Sec must be >= 0 and be < 60, now is: " + sec);
 
         }
-        this.h = h;
-        this.min = min;
-        this.sec = sec;
+        this.sec += h * 3600;
+        this.sec += min * 60;
+        this.sec += sec;
     }
 
+    void saySound(){
+        System.out.println(this.sound);
+    }
 
-    public void passTime(int howLong) {
-        for (int i = 0; i < howLong; i++){
-            sec ++;
-            if (sec == DURATION_SECOND) {
-                sec = 0;
-                min++;
-            }
-            if (min == DURATION_MINUTE) {
-                min = 0;
-                h++;
-                saySound();
-            }
-            if (h == 24) {
-                h = 0;
-            }
+    public void passTime(){
+
+        sec++;
+        if (sec % 3600 == 0){
+            saySound();
+        }
+
+    }
+
+    void passTime(int howManySec) {
+        for (int i = 0; i < howManySec ; i++){
+            passTime();
         }
     }
 
-    public void setTimeSpeed(int timeSpeed) {
-        this.timeSpeed = timeSpeed;
+    int getSec() {
+        return (int) sec % 60;
+    }
+
+    int getMin() {
+        return  ((int) sec % 3600) / 60  ;
+    }
+
+    public int getH() {
+        return (int) sec / 3600;
+    }
+
+    public void setH(int h)
+    {
+        this.sec += h * 3600;
+    }
+    public void setMin(int min) {
+        this.sec += min * 60;
+    }
+
+    public void setSec(int sec) {
+        this.sec += (this.sec % 60) + sec;
     }
 }

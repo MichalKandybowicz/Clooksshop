@@ -1,9 +1,12 @@
 package clooks;
 
-public class WallClook extends Clook {
+import java.util.Random;
 
-    String sound = "Cuckoo";
-    public WallClook(int sec,
+public class WallClock extends Clock {
+
+    private final static String theSound = "Cuckoo";
+
+    public WallClock(int sec,
                      int min,
                      int h,
                      int timeSpeed) {
@@ -11,7 +14,24 @@ public class WallClook extends Clook {
                 min,
                 h,
                 timeSpeed);
+
+        this.sound = theSound;
     }
 
+    public void setRandomTimeSpeed() {
+        Random random = new Random();
+        timeSpeed = random.nextInt(5) - 2;
 
+    }
+
+    @Override
+    public void passTime() {
+
+        sec = sec + 1 + ((float) timeSpeed / 60);
+        if (sec  % 3600 == 0){
+            saySound();
+//            setRandomTimeSpeed();
+        }
+
+    }
 }

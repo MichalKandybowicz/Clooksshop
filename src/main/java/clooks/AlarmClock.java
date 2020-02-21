@@ -1,24 +1,53 @@
 package clooks;
 
-import java.util.ArrayList;
-import java.util.List;
+public class AlarmClock extends Clock {
 
-public class AlarmClook extends Clook {
+    private int alarmH;
+    private int alarmMin;
 
-    private List < Integer > alarmTime = new ArrayList< Integer >();
 
-    String sound = "Buzzz";
-    public AlarmClook(int sec, int min, int h, int timeSpeed) {
-        super(sec, min, h, timeSpeed);
-        this.sec = sec;
-        this.min = min;
-        this.h = h;
-        this.timeSpeed = timeSpeed;
+    private final static String theSound = "Cuckoo";
+
+
+    public AlarmClock(int sec,
+                      int min,
+                      int h,
+                      int timeSpeed) {
+        super(sec,
+                min,
+                h,
+                timeSpeed);
+        this.sound = theSound;
     }
 
-    public void setAlarmTime(List< Integer > alarmTime) {
-        this.alarmTime = alarmTime;
+    void setAlarmTime(int AlarmH, int alarmMin) {
+        this.alarmH = AlarmH;
+        this.alarmMin = alarmMin;
     }
 
+    String howLongTimeToAlarm(){
+
+        int alarmTimeInMin = alarmH * 60 + alarmMin;
+        int actualTimeInMin = (int) sec / 60;
+
+
+        int timeToAlarm = alarmTimeInMin - actualTimeInMin;
+
+        if (timeToAlarm >= 0){
+            int timeToAlarmInMin = timeToAlarm % 60;
+            int timeToAlarmInH = timeToAlarm / 60;
+            return "To alarm u have: " + timeToAlarmInH + ":" + timeToAlarmInMin;
+        }
+        else {
+            int minInDay = 1440;
+            timeToAlarm += minInDay;
+            int timeToAlarmInMin = timeToAlarm % 60;
+            int timeToAlarmInH = timeToAlarm / 60;
+            return "To alarm u have: " + timeToAlarmInH + ":" + timeToAlarmInMin;
+
+        }
+
+
+    }
 
 }
